@@ -1,0 +1,1204 @@
+﻿<Window x:Class="Treatment_Wim.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Treatment_Wim"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:inter="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:min="clr-namespace:Treatment_Wim.ViewModels"
+        mc:Ignorable="d"
+        Name="MainTreatmentWindow"
+        Title="Обработка автономного образа" 
+        Height="380" Width="950"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        SizeToContent="Height"
+        WindowStyle="None"
+        Style="{DynamicResource Window}">
+
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+
+    <inter:Interaction.Behaviors>
+        <min:WindowBehavior/>
+    </inter:Interaction.Behaviors>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="77*"/>
+            <ColumnDefinition Width="18*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="289*"/>
+        </Grid.RowDefinitions>
+
+        <tb:TaskbarIcon
+            Visibility="Visible"
+            ToolTipText="{Binding Output}"
+            IconSource="pack://application:,,,/Resources/MainIcon.ico">
+
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem 
+                        Header="Свернуть в трей"
+                        Command="{Binding MinimizeProgramm}"/>
+                    <MenuItem
+                        Header="Закрыть" 
+                        Command="{Binding CloseProgramm}"/>
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+
+            <inter:Interaction.Behaviors>
+                <min:ExpandBehavior/>
+            </inter:Interaction.Behaviors>
+
+        </tb:TaskbarIcon>
+
+        <StackPanel
+            Name="TopPanel"
+            Grid.ColumnSpan="2"
+            Orientation="Horizontal"
+            Background="Black"
+            Margin="0,3">
+
+            <Image
+                Source="pack://application:,,,/Resources/MainIcon.ico"
+                Margin="5 0 0 0"
+                Height="20"
+                Width="20"
+                HorizontalAlignment="Left"/>
+
+            <TextBlock
+                Text="Обработка автономного образа"
+                VerticalAlignment="Center"
+                Margin="1 0 0 0"/>
+
+            <Button
+                Height="30"
+                Width="30"
+                Margin="685 0 0 0"
+                BorderThickness="2"
+                Background="#2B5279"
+                BorderBrush="#1d1d1d"
+                Template="{DynamicResource MinimizeButtonTemplate}"
+                Command="{Binding MinimizeProgramm}">
+
+                <Image
+                    Source="/Resources/Minimized.png"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Width="30"
+                    Height="30"/>
+
+                <Button.Resources>
+                    <ControlTemplate x:Key="MinimizeButtonTemplate" TargetType="Button">
+                        <Border 
+                            x:Name="border" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="1" 
+                            Background="{TemplateBinding Background}" 
+                            CornerRadius="2"
+                            SnapsToDevicePixels="True">
+                            <ContentPresenter 
+                                x:Name="contentPresenter" 
+                                ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                Content="{TemplateBinding Content}" 
+                                ContentStringFormat="{TemplateBinding ContentStringFormat}" 
+                                Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                Margin="{TemplateBinding Padding}" 
+                                RecognizesAccessKey="True" 
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsDefaulted" Value="True">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource DarkGrayBrush}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#1d1d1d"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#FFC4E5F6"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FF2C628B"/>
+                            </Trigger>
+                            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FF245A83"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" TargetName="border" Value="#FFF4F4F4"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FFADB2B5"/>
+                                <Setter Property="Foreground" Value="#FF838383"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Resources>
+
+            </Button>
+
+            <Button
+                    Height="30"
+                    Width="30"
+                    Margin="0 0 0 0"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Right"
+                    BorderThickness="2"
+                    Background="#2B5279"
+                    BorderBrush="#1d1d1d"
+                    Template="{DynamicResource ButtonTemplate}"
+                    Command="{Binding CloseProgramm}">
+
+                <Image
+                    Source="pack://application:,,,/Resources/Close.png"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Width="30"
+                    Height="30"/>
+
+                <Button.Resources>
+                    <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
+                        <Border 
+                            x:Name="border" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="1" 
+                            Background="{TemplateBinding Background}" 
+                            CornerRadius="2"
+                            SnapsToDevicePixels="True">
+                            <ContentPresenter 
+                                x:Name="contentPresenter" 
+                                ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                Content="{TemplateBinding Content}" 
+                                ContentStringFormat="{TemplateBinding ContentStringFormat}" 
+                                Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                Margin="{TemplateBinding Padding}" 
+                                RecognizesAccessKey="True" 
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsDefaulted" Value="True">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="DarkRed"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#1d1d1d"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#FFC4E5F6"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FF2C628B"/>
+                            </Trigger>
+                            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FF245A83"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" TargetName="border" Value="#FFF4F4F4"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FFADB2B5"/>
+                                <Setter Property="Foreground" Value="#FF838383"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Resources>
+
+            </Button>
+
+        </StackPanel>
+
+        <StackPanel 
+            Grid.Row="1"
+            Grid.Column="0">
+
+            <TabControl
+                BorderThickness="0 1 0 0"
+                IsEnabled="{Binding TabEnable}"
+                Style="{DynamicResource TabControlStyle}">
+
+                <TabItem 
+                    Header="Захват образа"
+                    Style="{DynamicResource TabItemStyle}">
+                    <Grid>
+                        <StackPanel>
+
+                            <StackPanel
+                                Margin="10 0 0 0">
+
+                                <TextBlock>
+                                    <Bold>Монтировать виртуальный диск (если не подключен)</Bold>
+                                </TextBlock>
+
+                                <DockPanel
+                                    Margin="0 5 0 5">
+
+                                    <Button
+                                        Content="Файл VHD"
+                                        Width="70"
+                                        Height="20"
+                                        Style="{DynamicResource ButtonStyle}"
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding WhereFrom}"
+                                        CommandParameter="{Binding ElementName=txbWhereFromVhd, Path=Name}"
+                                        ToolTip="Подключить виртуальный диск"/>
+
+                                    <Button
+                                        Name="btnToVhd"
+                                        Content="Куда"
+                                        Width="70"
+                                        Height="20"
+                                        Margin="10 0 0 0"
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding WhereFrom}"
+                                        CommandParameter="{Binding ElementName=txbToFolderVhd, Path=Name}">
+
+                                        <Button.Style>
+                                            <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=txbWhereFromVhd, Path=Text}" Value="">
+                                                        <Setter Property="IsEnabled" Value="False"/>
+                                                        <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                                                        <Setter Property="ToolTip" Value="Будет доступно после выбора пути к файлу VHD"/>
+                                                    </DataTrigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="ToolTip" Value="Выбор пути к папке подключения VHD"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+
+                                    </Button>
+
+                                    <TextBox
+                                        Name="txbWhereFromVhd"
+                                        Text="{Binding Vhd.Image}"
+                                        Height="20" 
+                                        Style="{DynamicResource TextBoxStyle}"
+                                        Margin="10 0 0 0" 
+                                        Width="273"
+                                        Tag="Путь к файлу VHD"/>
+
+                                    <TextBox
+                                        Name="txbToFolderVhd"
+                                        Text="{Binding Vhd.MountDir}"
+                                        Height="20"
+                                        Style="{DynamicResource TextBoxStyle}"
+                                        Margin="10 0 20 0"
+                                        Tag="Путь к папке монтирования"/>
+
+                                </DockPanel>
+
+                                <TextBlock>
+                                    <Bold>Отключить виртуальный диск</Bold>
+                                </TextBlock>
+
+                                <Button
+                                    Content="Отключить"
+                                    Margin="0 5 0 10"
+                                    Width="70"
+                                    Height="20"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding Unmount}"
+                                    CommandParameter="True"
+                                    ToolTip="Отключить примонтированный образ VHD"/>
+
+                                <TextBlock
+                                    Text="{Binding Vhd.MountDir}"
+                                    Margin="80 -28 0 0"/>
+
+                            </StackPanel>
+
+                            <StackPanel>
+                                <TextBlock
+                                Margin="10 0 0 0">
+                                <Bold>Захват образа</Bold>
+                                </TextBlock>
+
+                                <DockPanel 
+                                    Height="30"
+                                    Margin="10 0 0 0"
+                                    VerticalAlignment="Top">
+
+                                    <Button
+                                        Content="Откуда"
+                                        Width="70"
+                                        Height="20"
+                                        Style="{DynamicResource ButtonStyle}"
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding WhereFrom}"
+                                        CommandParameter="{Binding ElementName=txbWhereFromCapture, Path=Name}"
+                                        ToolTip="Выбор папки, откуда будет осуществлен захват образа"/>
+
+                                    <Button
+                                        Content="Выходной WIM"
+                                        FontSize="9"
+                                        Width="70"
+                                        Height="20"
+                                        Margin="10 0 0 0"
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding WhereFrom}"
+                                        CommandParameter="{Binding ElementName=txbToFolderCapture, Path=Name}">
+
+                                        <Button.Style>
+                                            <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=txbWhereFromCapture, Path=Text}" Value="">
+                                                        <Setter Property="IsEnabled" Value="False"/>
+                                                        <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                                                        <Setter Property="ToolTip" Value="Будет доступно после выбора папки захвата"/>
+                                                    </DataTrigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="ToolTip" Value="Выбор пути к готовому файлу WIM"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+
+                                    </Button>
+
+                                    <TextBox
+                                        Name="txbWhereFromCapture"
+                                        IsReadOnly="True"
+                                        Text="{Binding CaptureMount.CaptureDir}"
+                                        Height="20" 
+                                        Style="{DynamicResource TextBoxStyle}"
+                                        Margin="10 0 0 0" 
+                                        Width="273"
+                                        Tag="Путь захватываемой папки"/>
+
+                                    <TextBox
+                                        Name="txbToFolderCapture"
+                                        IsReadOnly="True"
+                                        Text="{Binding CaptureMount.Image}"
+                                        Height="20"
+                                        Style="{DynamicResource TextBoxStyle}"
+                                        Margin="10 0 20 0"
+                                        Tag="Путь к готовому WIM"/>
+
+                                </DockPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+                <TabItem 
+                    Header="Подключение образа"
+                    Style="{DynamicResource TabItemStyle}">
+                    <Grid>
+                        <StackPanel>
+
+                            <TextBlock
+                            TextWrapping="Wrap"
+                            Margin="10 0 0 0">
+                            <Bold>Подключение образа</Bold>
+                            </TextBlock>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Content="WIM файл"
+                                    Width="70"
+                                    Height="20"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="{Binding ElementName=txbWhereFromMount, Path=Name}"
+                                    ToolTip="Выбор подключаемого файла WIM"/>
+
+                                <ComboBox
+                                    Name="cmbIndex"
+                                    Height="20" 
+                                    Margin="0 0 0 0" 
+                                    Width="41"
+                                    Text="{Binding Index}">
+
+                                    <ComboBox.Style>
+                                        <Style BasedOn="{StaticResource ComboBoxStyle}" TargetType="ComboBox">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=txbWhereFromMount, Path=Text}" Value="">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                                                    <Setter Property="ToolTip" Value="Будет доступно после выбора файла WIM"/>
+                                                </DataTrigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Выбор индекса подключаемого файла WIM"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+
+                                    <ComboBoxItem>
+                                        <TextBlock Text="1"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="2"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="3"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="4"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="5"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="6"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="7"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="8"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="9"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="10"/>
+                                    </ComboBoxItem>
+                                </ComboBox>
+
+                                <Button
+                                    Content="Куда"
+                                    Margin="10 0 0 0"
+                                    Width="70"
+                                    Height="20"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="{Binding ElementName=txbToFolderMount, Path=Name}">
+
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=cmbIndex, Path=Text}" Value="0">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                                                    <Setter Property="ToolTip" Value="Будет доступно после выбора индекса файла WIM"/>
+                                                </DataTrigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Выбор пути для подключения файла WIM"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+
+                                </Button>
+
+
+                                <TextBox
+                                    Name="txbWhereFromMount"
+                                    Text="{Binding CaptureMount.MountImage}"
+                                    Height="20" 
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Margin="10 0 0 0" 
+                                    Width="273"
+                                    Tag="Путь к подключаемому файлу WIM"/>
+
+
+                                <TextBox
+                                    Name="txbToFolderMount"
+                                    Text="{Binding CaptureMount.MountDir, UpdateSourceTrigger=PropertyChanged}"
+                                    Height="20"
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Margin="10,0,20,0"
+                                    Tag="Путь к папке подключения"/>
+
+                            </DockPanel>
+
+                            <StackPanel
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <StackPanel.Resources>
+                                    <Style TargetType="DockPanel">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=txbToFolderMount, Path=Text}" Value="">
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Resources>
+
+                                <TextBlock>
+                                    <Bold>Отключение образа</Bold>
+                                </TextBlock>
+
+                                <CheckBox
+                                    Content="Не сохранять изменения"
+                                    VerticalAlignment="Center"
+                                    Style="{DynamicResource CheckBoxStyle}"
+                                    Margin="0 5 0 5"
+                                    IsChecked="{Binding Discard}"/>
+
+                                <Button
+                                    Content="Отключить"
+                                    Margin="0 0 0 10"
+                                    Width="70"
+                                    Height="20"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding Unmount}"
+                                    ToolTip="Отключение примонтированного WIM"/>
+
+                                <TextBlock
+                                    Text="{Binding CaptureMount.MountDir}"
+                                    Margin="80 -28 0 0"/>
+
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Grid>
+
+                </TabItem>
+
+                <TabItem 
+                    Header="Опции"
+                    ToolTipService.ShowOnDisabled="True">
+
+                    <TabItem.Style>
+                        <Style BasedOn="{StaticResource TabItemStyle}" TargetType="TabItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=txbToFolderMount, Path=Text}" Value="">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value="Будет доступно при подключенном образе WIM"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TabItem.Style>
+
+                    <Grid>
+                        <StackPanel>
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                Margin="10 0 0 0">
+                                <Bold>Импорт ассоциаций файлов</Bold>
+                            </TextBlock>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Content="Обзор"
+                                    Width="70"
+                                    Height="20"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="{Binding ElementName=txbAppAssoc, Path=Name}"/>
+
+                                <TextBox
+                                    Name="txbAppAssoc"
+                                    Height="20"
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Margin="30 0 100 0"
+                                    Text="{Binding Options.AppAssocPath}"
+                                    Tag="Путь к файлу ассоциаций (*.xml)"/>
+
+                            </DockPanel>
+
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                Margin="10 0 0 0">
+                                <Bold>Импорт настроенного меню пуск</Bold>
+                            </TextBlock>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Content="Обзор"
+                                    Width="70"
+                                    Height="20"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="txbStartLayout"/>
+
+                                <TextBox
+                                    Name="txbStartLayout"
+                                    IsReadOnly="True"
+                                    Height="20"
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Margin="30 0 100 0"
+                                    Text="{Binding Options.LayoutPath}"
+                                    Tag="Путь к файлу меню пуск (*.xml)"/>
+
+                            </DockPanel>
+
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                Margin="10 0 0 0">
+                                <Bold>Импорт настроенного WinRE</Bold>
+                            </TextBlock>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Content="Обзор"
+                                    Width="70"
+                                    Height="20"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="txbWinRe"/>
+
+                                <TextBox
+                                    Name="txbWinRe"
+                                    IsReadOnly="True"
+                                    Height="20"
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Margin="30 0 100 0"
+                                    Text="{Binding Options.WinRePath}"
+                                    Tag="Путь к настроенному WimRE (*.wim)"/>
+
+                            </DockPanel>
+
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                Margin="10 0 0 0">
+                                <Bold>Импорт файла ответов</Bold>
+                            </TextBlock>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Content="Обзор"
+                                    Width="70"
+                                    Height="20"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="txbUnattend"/>
+
+                                <TextBox
+                                    x:Name="txbUnattend"
+                                    IsReadOnly="True"
+                                    Height="20"
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Margin="30 0 100 0"
+                                    Text="{Binding Options.UnattendPath}"
+                                    Tag="Путь к файлу ответов (*.xml)"/>
+
+                            </DockPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+                <TabItem
+                    Header="Iso"
+                    Style="{DynamicResource TabItemStyle}">
+                    <Grid>
+                        <StackPanel>
+
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                Margin="10 0 0 0">
+                                <Bold>Собрать ISO</Bold>
+                            </TextBlock>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Content="Install"
+                                    Width="70"
+                                    Height="20"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="txbWhereFromWim"/>
+
+                                <TextBox
+                                    Name="txbWhereFromWim"
+                                    Height="20"
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Margin="30 0 100 0"
+                                    Text="{Binding Iso.InstallWim}"
+                                    Tag="Необязательно">
+
+                                </TextBox>
+
+                            </DockPanel>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Content="Boot"
+                                    Width="70"
+                                    Height="20"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="txbWhereFromBoot"/>
+
+                                <TextBox
+                                    Name="txbWhereFromBoot"
+                                    Height="20"
+                                    Margin="30 0 100 0"
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Text="{Binding Iso.BootWim}"
+                                    Tag="Необязательно">
+
+                                </TextBox>
+
+                            </DockPanel>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Content="Откуда"
+                                    Width="70"
+                                    Height="20"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="txbWhereFromIso"/>
+
+                                <TextBox
+                                    Name="txbWhereFromIso"
+                                    Height="20"
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Margin="30 0 100 0"
+                                    Text="{Binding Iso.WhereFrom}"
+                                    Tag="Путь к папке с файлами установки Windows"/>
+
+                            </DockPanel>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Content="Выходной ISO"
+                                    FontSize="9"
+                                    Width="70"
+                                    Height="20"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="txbToFolderIso">
+
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=txbWhereFromIso, Path=Text}" Value="">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                                                    <Setter Property="ToolTip" Value="Будет доступно после выбора пути к папке с файлами установки Windows"/>
+                                                </DataTrigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Выбор пути к конечному файлу ISO"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+
+                                </Button>
+
+                                <TextBox
+                                    Name="txbToFolderIso"
+                                    Height="20" 
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Margin="30 0 100 0" 
+                                    Text="{Binding Iso.To}"
+                                    Tag="Путь к конечному файлу ISO"/>
+
+                            </DockPanel>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 10 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Content="Собрать"
+                                    Width="70"
+                                    Height="20"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding Collect}">
+
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=txbToFolderIso, Path=Text}" Value="">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                                                    <Setter Property="ToolTip" Value="Будет доступно после выбора пути к конечному файлу ISO"/>
+                                                </DataTrigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Сбока образа Iso"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+
+                                </Button>
+
+                            </DockPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+                <TabItem
+                    Header="Конвертер"
+                    Style="{DynamicResource TabItemStyle}">
+                    <Grid>
+                        <StackPanel>
+                            <TextBlock>
+                                <Bold>Конвертировать WIM/ESD</Bold>
+                            </TextBlock>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Content="Исходный"
+                                    Width="70"
+                                    Height="20"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="txbWhereFromConvert"
+                                    Style="{DynamicResource ButtonStyle}"
+                                    ToolTip="Исходный файл WIM\ESD"/>
+
+                                <ComboBox
+                                    Name="cmbConvertIndex"
+                                    Height="20" 
+                                    Margin="0 0 0 0" 
+                                    Width="41"
+                                    Text="{Binding Index}">
+
+                                    <ComboBox.Style>
+                                        <Style BasedOn="{StaticResource ComboBoxStyle}" TargetType="ComboBox">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=txbWhereFromConvert, Path=Text}" Value="">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                                                    <Setter Property="ToolTip" Value="Будет доступно после выбора исходного файла"/>
+                                                </DataTrigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Выбор индекса конвертируемого файла"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+
+                                    <ComboBoxItem>
+                                        <TextBlock Text="1"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="2"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="3"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="4"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="5"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="6"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="7"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="8"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="9"/>
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <TextBlock Text="10"/>
+                                    </ComboBoxItem>
+                                </ComboBox>
+
+                                <Button
+                                    Content="Конечный"
+                                    Width="70"
+                                    Height="20"
+                                    Margin="10 0 0 0" 
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding WhereFrom}"
+                                    CommandParameter="txbToFolderConvert">
+
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=cmbConvertIndex, Path=Text}" Value="0">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                                                    <Setter Property="ToolTip" Value="Будет доступно после выбора индекса исходного файла"/>
+                                                </DataTrigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Выбор пути к конечному файлу"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+
+                                <TextBox
+                                    Name="txbWhereFromConvert"
+                                    IsReadOnly="True"
+                                    Height="20" 
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Width="273"
+                                    Margin="30 0 0 0"
+                                    Text="{Binding Convert.Image}"
+                                    Tag="Путь к конвертируемому файлу"/>
+
+                                <TextBox
+                                    Name="txbToFolderConvert"
+                                    IsReadOnly="True"
+                                    Height="20" 
+                                    Style="{DynamicResource TextBoxStyle}"
+                                    Margin="10 0 20 0"
+                                    Text="{Binding Convert.MountDir}"
+                                    Tag="Путь к выходному файлу"/>
+
+                            </DockPanel>
+
+                            <TextBlock>
+                                <Bold>Сжатие</Bold>
+                            </TextBlock>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 0 0 0"
+                                VerticalAlignment="Top">
+
+                                <DockPanel.Resources>
+                                    <Style TargetType="DockPanel">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=txbToFolderConvert, Path=Text}" Value="">
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                                <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                                                <Setter Property="ToolTip" Value="Будет доступно после выбора пути к конечному файлу"/>
+                                            </DataTrigger>
+                                            <Trigger Property="IsEnabled" Value="True">
+                                                <Setter  Property="ToolTip" Value="Выбор степени сжатия"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DockPanel.Resources>
+
+                                <RadioButton
+                                    Name="NoCompress"
+                                    Content="Без сжатия"
+                                    Margin="0 0 10 0"
+                                    IsChecked="{Binding Convert.NoCompress}">
+
+                                    <RadioButton.Style>
+                                        <Style BasedOn="{StaticResource RadioButtonStyle}" TargetType="RadioButton">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=btnConvert, Path=IsPressed}" Value="True">
+                                                    <Setter Property="IsChecked" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </RadioButton.Style>
+
+                                </RadioButton>
+
+                                <RadioButton
+                                    Name="fast"
+                                    Content="Нормальное"
+                                    Margin="0 0 10 0"
+                                    IsChecked="{Binding Convert.Normal}">
+
+                                    <RadioButton.Style>
+                                        <Style BasedOn="{StaticResource RadioButtonStyle}" TargetType="RadioButton">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=btnConvert, Path=IsPressed}" Value="True">
+                                                    <Setter Property="IsChecked" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </RadioButton.Style>
+
+                                </RadioButton>
+
+                                <RadioButton
+                                    Name="strong"
+                                    Content="Сильное"
+                                    Margin="0 0 10 0"
+                                    IsChecked="{Binding Convert.Strong}">
+
+                                    <RadioButton.Style>
+                                        <Style BasedOn="{StaticResource RadioButtonStyle}" TargetType="RadioButton">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=btnConvert, Path=IsPressed}" Value="True">
+                                                    <Setter Property="IsChecked" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </RadioButton.Style>
+
+                                </RadioButton>
+
+                                <RadioButton
+                                    Name="Recovery"
+                                    Content="Максимальное"
+                                    Margin="0 0 10 0"
+                                    IsChecked="{Binding Convert.Maximum}">
+
+                                    <RadioButton.Style>
+                                        <Style BasedOn="{StaticResource RadioButtonStyle}" TargetType="RadioButton">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=btnConvert, Path=IsPressed}" Value="True">
+                                                    <Setter Property="IsChecked" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </RadioButton.Style>
+
+                                </RadioButton>
+
+                            </DockPanel>
+
+                            <DockPanel
+                                Height="30"
+                                Margin="10 10 0 0"
+                                VerticalAlignment="Top">
+
+                                <Button
+                                    Name="btnConvert"
+                                    Content="Конверт."
+                                    Width="70"
+                                    Height="20"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding Convertation}">
+
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+                                            <Style.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding IsChecked, ElementName=NoCompress}" Value="False"/>
+                                                        <Condition Binding="{Binding IsChecked, ElementName=fast}" Value="False"/>
+                                                        <Condition Binding="{Binding IsChecked, ElementName=strong}" Value="False"/>
+                                                        <Condition Binding="{Binding IsChecked, ElementName=Recovery}" Value="False"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+                                                    <Setter Property="ToolTip" Value="Будет доступно после выбора степени сжатия"/>
+                                                </MultiDataTrigger>
+                                                <Trigger Property="IsEnabled" Value="True">
+                                                    <Setter Property="ToolTip" Value="Конвертирование выбранного файла"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+
+                                </Button>
+
+                            </DockPanel>
+
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+            </TabControl>
+
+            <Separator/>
+
+            <TextBlock
+                Margin="10 0 0 0"
+                Text="{Binding Output}"
+                TextWrapping="Wrap"/>
+
+            <ProgressBar
+                Width="150"
+                Height="10"
+                Style="{DynamicResource ProgressBarStyle}"
+                Margin="10 2 0 0"
+                IsIndeterminate="{Binding ProgBarStart}"
+                Maximum="60"
+                Minimum="0"
+                Value="{Binding ProgBarValue}"/>
+
+            <Button
+                Content="Отмена"
+                HorizontalAlignment="Left"
+                Margin="10 5 0 5"
+                Height="20"
+                Width="70"
+                Style="{DynamicResource ButtonStyle}"
+                Command="{Binding Abort}"
+                ToolTip="Отмена текущей операции"/>
+
+        </StackPanel>
+
+        <ListView
+            Grid.Column="1"
+            Grid.Row="1"
+            ItemsSource="{Binding OperationLog}"
+            Background="Transparent" Margin="0,22,0,0"
+            BorderThickness="1 1 0 0">
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock
+                        Foreground="White"
+                        Text="{Binding}"
+                        ToolTip="{Binding}"
+                        ToolTipService.ShowOnDisabled="True">
+
+                        <TextBlock.Resources>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <Trigger Property="Text" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Resources>
+
+                    </TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
+
+    </Grid>
+
+
+</Window>
